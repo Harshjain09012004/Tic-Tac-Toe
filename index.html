@@ -1,0 +1,90 @@
+<!DOCTYPE html/>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Tic Tac Toe Game</title>
+        <link rel="stylesheet" href="index.css">
+    </head>
+
+    <body>
+        <div id="turn" class="turn">Turn Player1 : X</div>
+        <div class="grid">
+            <div class="cell" id="1"></div>
+            <div class="cell" id="2"></div>
+            <div class="cell" id="3"></div>
+            <div class="cell" id="4"></div>
+            <div class="cell" id="5"></div>
+            <div class="cell" id="6"></div>
+            <div class="cell" id="7"></div>
+            <div class="cell" id="8"></div>
+            <div class="cell" id="9"></div>
+        </div>
+
+        <script>
+            let matrix = [['','',''], ['', '', ''], ['', '', '']];
+            function checkWinner(){
+                for(let i = 0;i<3;i++){
+                    let countX = 0, countO = 0;
+                    for(let j=0;j<3;j++){
+                        if(matrix[i][j] == 'X') countX++;
+                        if(matrix[i][j] == 'O') countO++;
+                    }
+                    if(countX==3) return 'X';
+                    if(countO==3) return 'O';
+                }
+
+                let countX = 0, countO = 0;
+                for(let i=0;i<3;i++){
+                    if(matrix[i][i]=='X') countX++;
+                    if(matrix[i][i]=='O') countO++;
+                }
+                if (countX == 3) return 'X';
+                if (countO == 3) return 'O';
+
+                countX = 0, countO = 0;
+                for(let i=0, j=2;i<3;i++,j--){
+                    if(matrix[i][j]=='X') countX++;
+                    if(matrix[i][j] == 'O') countO++;
+                }
+                if (countX == 3) return 'X';
+                if (countO == 3) return 'O';
+
+                for(let j=0;j<3;j++){
+                    let countX = 0, countO = 0;
+                    for(let i=0;i<3;i++){
+                        if(matrix[i][j] == 'X') countX++;
+                        if(matrix[i][j] == 'O') countO++;
+                    }
+                    if (countX == 3) return 'X';
+                    if (countO == 3) return 'O';
+                }
+                
+                return '';
+            }
+            
+            let player1 = true, winner = false, countSteps = 0;
+            const turn = document.getElementById('turn');
+            const cells = document.getElementsByClassName('cell');
+            
+            Array.from(cells).forEach((cell)=>{
+                cell.addEventListener('click',(e)=>{
+                    if((cell.innerHTML != 'X' && cell.innerHTML != 'O') && !winner) 
+                    {
+                        cell.innerHTML = player1 ? "X" : "O";
+                        countSteps++;
+                        
+                        let index = Number(cell.id) - 1;
+                        matrix[Math.floor(index/3)][index%3] = player1 ? "X" : "O";
+                        winner = checkWinner(); player1 = !player1;
+
+                        if(winner=='X' || winner == 'O') turn.innerHTML = "Player " + winner + " won";
+                        else turn.innerHTML = player1 ? "Turn Player1 : X" : "Turn Player2 : O";
+                    }
+                    if(countSteps >= 9 && !winner) turn.innerHTML = "There is a Tie"
+                })
+            })
+        </script>
+    </body>
+    
+</html>
